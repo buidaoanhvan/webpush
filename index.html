@@ -1,0 +1,46 @@
+<html>
+<title>Firebase Messaging Demo</title>
+<style>
+    div {
+        margin-bottom: 15px;
+    }
+</style>
+
+<body>
+<script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyDXrUhNWJKGZVHFq2Fq0TeNOPrI6XyxZXw",
+        authDomain: "kojiesan-61a3c.firebaseapp.com",
+        projectId: "kojiesan-61a3c",
+        storageBucket: "kojiesan-61a3c.appspot.com",
+        messagingSenderId: "221967240464",
+        appId: "1:221967240464:web:7d17c8a5ac1cfffc2de995",
+        measurementId: "G-ZBNTFZZWDH",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+    messaging
+        .requestPermission()
+        .then(function () {
+            return messaging.getToken();
+        });
+
+    let enableForegroundNotification = true;
+    messaging.onMessage(function (payload) {
+        if (enableForegroundNotification) {
+            let notification = payload.notification;
+            navigator.serviceWorker
+                .getRegistrations()
+                .then((registration) => {
+                    registration[0].showNotification(notification.title, {
+                        body: notification.body,
+                    });
+                });
+        }
+    });
+</script>
+</body>
+
+</html>
